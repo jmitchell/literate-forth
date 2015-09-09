@@ -1,0 +1,45 @@
+* Forth Base
+Forth is a small stack-based language. Here we will implement a small
+foundation which can be used to bootstrap Forth.
+
+The two essential in-memory data structures are the dictionary and the
+stack. As the user strings together words defined in the dictionary,
+Forth consumes those words by either pushing them onto the stack or
+doing some kind of operation on the stack.
+
+For example, the user pushes the word =2= onto the stack, and then
+=3=. Next, =+= is pushed, so the top two elements of the stack, =3=
+and =2=, pop off the stack, are added, and the result, =5=, is
+pushed. To see that =5= is indeed at top of the stack, the =.= is
+applied next. It pops the top value from the stack and prints it. The
+=5= and =ok= are both output from Forth.
+
+#+BEGIN_EXAMPLE
+2 3 + . 5  ok
+#+END_EXAMPLE
+
+Forth is meaningless without words, so it only makes sense to decide
+which words we need in the core and decide how to encode them in a
+dictionary.
+** Words
+Here is the initial word list. It may change, but the important thing
+is to have a starting point.
+
+- =[-]\d+= :: Words representing signed integers. When encountered,
+              they are pushed onto the stack.
+- SEE :: Print the definition of the following word. The output may
+         either be disassembled machine code or a sequence of Forth
+         words, depending on how the word was defined.
+- .  ( n -- ) :: Pop the top value from the stack and print it.
+- +  ( a b -- c ) :: Pop the top two values, add them, and push the
+     result.
+- -  ( a b -- c ) :: Pop the top two values, subtract them, and push
+     the result.
+- !  ( n addr -- ) :: Store the number n into the memory address addr.
+- @  ( addr -- n ) :: Fetch the value stored in memory address addr,
+     and push it onto the stack.
+- : :: Start a new Forth word definition. The word immediately
+       following is the word being defined, and the following words up
+       to the =;= are the definition.
+- ; :: End a Forth word definition. See =:=.
+- BYE :: Quit the Forth session.
